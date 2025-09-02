@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test du Suivi - Réclamations</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .test-info {
+            background: #e3f2fd;
+            border: 1px solid #2196f3;
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+        }
+        .test-button {
+            background: #4caf50;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 6px;
+            cursor: pointer;
+            margin: 0.5rem;
+            font-size: 0.9rem;
+        }
+        .test-button:hover {
+            background: #45a049;
+        }
+        .debug-info {
+            background: #f5f5f5;
+            border: 1px solid #ddd;
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            font-family: monospace;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container header-container">
+            <div class="logo">
+                <h1>🧪 Test du Suivi</h1>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="suivi.html">Retour au Suivi</a></li>
+                    <li><a href="test.html">Tests Complets</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <div class="container">
+        <h1 style="text-align: center; margin: 2rem 0; color: #333;">🧪 Test du Système de Suivi</h1>
+        
+        <div class="test-info">
+            <h3>📋 Instructions de Test</h3>
+            <p>Cette page permet de tester le système de suivi sans avoir besoin du backend Laravel.</p>
+            <ol>
+                <li>Cliquez sur "Tester avec Données Simulées" pour voir le fonctionnement</li>
+                <li>Vérifiez que la timeline de statut s'affiche correctement</li>
+                <li>Vérifiez que les détails de la réclamation sont affichés</li>
+                <li>Vérifiez que l'historique et les réponses sont visibles</li>
+            </ol>
+        </div>
+
+        <div class="test-section">
+            <h2>1. Test avec Données Simulées</h2>
+            <p>Test du système de suivi avec des données de test prédéfinies</p>
+            <button class="test-button" onclick="testWithMockData()">Tester avec Données Simulées</button>
+            <div id="mock-test-result"></div>
+        </div>
+
+        <div class="test-section">
+            <h2>2. Test de l'API Backend</h2>
+            <p>Test de la connexion avec le serveur Laravel réel</p>
+            <button class="test-button" onclick="testRealAPI()">Tester l'API Réelle</button>
+            <div id="real-api-test-result"></div>
+        </div>
+
+        <div class="test-section">
+            <h2>3. Test de Validation des Données</h2>
+            <p>Vérification de la gestion des données manquantes ou invalides</p>
+            <button class="test-button" onclick="testDataValidation()">Tester la Validation</button>
+            <div id="validation-test-result"></div>
+        </div>
+
+        <div class="test-section">
+            <h2>📊 Informations de Débogage</h2>
+            <div id="debug-info" class="debug-info">
+                <p>Cliquez sur les boutons de test pour voir les informations de débogage...</p>
+            </div>
+        </div>
+
+        <!-- Section de résultats du suivi (initialement cachée) -->
+        <div id="tracking-results" class="status-container" style="display: none;">
+            <div class="status-header">
+                <h2>Statut de votre réclamation</h2>
+                <p>Référence: <strong id="complaint-reference"></strong></p>
+            </div>
+            
+            <div class="status-timeline" id="status-timeline">
+                <!-- Timeline sera généré dynamiquement -->
+            </div>
+            
+            <div class="complaint-details" id="complaint-details">
+                <!-- Détails seront générés dynamiquement -->
+            </div>
+        </div>
+        
+        <!-- Section historique (initialement cachée) -->
+        <div id="history-section" class="history-section" style="display: none;">
+            <h2>Historique du traitement</h2>
+            <div id="history-timeline">
+                <!-- Historique sera généré dynamiquement -->
+            </div>
+        </div>
+        
+        <!-- Section des réponses (initialement cachée) -->
+        <div id="responses-section" class="responses-section" style="display: none;">
+            <h2>Réponses et communications</h2>
+            <div id="responses-list">
+                <!-- Réponses seront générées dynamiquement -->
+            </div>
+        </div>
+    </div>
+
+    <script src="js/app.js"></script>
+    <script>
+        function updateDebugInfo(message) {
+            const debugInfo = document.getElementById('debug-info');
+            const timestamp = new Date().toLocaleTimeString();
+            debugInfo.innerHTML += `<p>[${timestamp}] ${message}</p>`;
+            debugInfo.scrollTop = debugInfo.scrollHeight;
+        }
+
+        function testWithMockData() {
+            updateDebugInfo('🧪 Début du test avec données simulées');
+            
+            // Simuler une réclamation de test
+            const mockComplaint = {
+                id: 1,
+                reference_id: "TT-1001",
+                user: { name: "Ahmed Ben Ali" },
+                type: "Internet",
+                subject: "Problème de connexion internet",
+                description: "Ma connexion internet est très lente depuis 3 jours",
+                contact_info: "12345678",
+                status: "En cours",
+                priority: "Haute",
+                assigned_agent: { name: "Karim Ben Salah" },
+                created_at: "2025-01-15T10:30:00.000000Z",
+                status_histories: [
+                    {
+                        old_status: null,
+                        new_status: "Nouveau",
+                        created_at: "2025-01-15T10:30:00.000000Z",
+                        changed_by: { name: "Ahmed Ben Ali" },
+                        notes: "Réclamation créée"
+                    },
+                    {
+                        old_status: "Nouveau",
+                        new_status: "En cours",
+                        created_at: "2025-01-16T14:15:00.000000Z",
+                        changed_by: { name: "Karim Ben Salah" },
+                        notes: "Réclamation prise en charge"
+                    }
+                ],
+                responses: [
+                    {
+                        response: "Bonjour, nous avons bien reçu votre réclamation. Notre équipe technique va examiner le problème dans les plus brefs délais.",
+                        created_at: "2025-01-16T14:20:00.000000Z",
+                        admin: { name: "Karim Ben Salah" }
+                    }
+                ]
+            };
+
+            updateDebugInfo('✅ Données simulées créées');
+            updateDebugInfo(`📊 Statut: ${mockComplaint.status}`);
+            updateDebugInfo(`📅 Historique: ${mockComplaint.status_histories.length} entrées`);
+            updateDebugInfo(`💬 Réponses: ${mockComplaint.responses.length} messages`);
+
+            // Afficher les résultats
+            displayComplaintStatus(mockComplaint);
+            
+            updateDebugInfo('🎯 Test terminé avec succès');
+            document.getElementById('mock-test-result').innerHTML = 
+                '<div class="test-result success">✅ Test avec données simulées réussi!</div>';
+        }
+
+        function testRealAPI() {
+            updateDebugInfo('🌐 Test de l\'API backend en cours...');
+            
+            const testReference = 'TT-1001';
+            updateDebugInfo(`🔍 Test avec la référence: ${testReference}`);
+            
+            // Utiliser la fonction réelle de suivi
+            trackComplaint(testReference);
+            
+            document.getElementById('real-api-test-result').innerHTML = 
+                '<div class="test-result warning">🔄 Test en cours... Vérifiez la console pour les détails</div>';
+        }
+
+        function testDataValidation() {
+            updateDebugInfo('🔍 Test de validation des données');
+            
+            // Test avec des données manquantes
+            const incompleteComplaint = {
+                reference_id: "TT-TEST",
+                status: "", // Statut manquant
+                priority: null, // Priorité manquante
+                created_at: "2025-01-15T10:30:00.000000Z"
+            };
+
+            updateDebugInfo('📊 Test avec données incomplètes');
+            updateDebugInfo(`Statut: "${incompleteComplaint.status || 'Non défini'}"`);
+            updateDebugInfo(`Priorité: "${incompleteComplaint.priority || 'Non définie'}"`);
+
+            // Tester la génération de timeline avec données manquantes
+            try {
+                generateStatusTimeline(incompleteComplaint);
+                updateDebugInfo('✅ Timeline générée avec données incomplètes');
+            } catch (error) {
+                updateDebugInfo(`❌ Erreur lors de la génération: ${error.message}`);
+            }
+
+            document.getElementById('validation-test-result').innerHTML = 
+                '<div class="test-result success">✅ Test de validation terminé</div>';
+        }
+
+        // Initialisation
+        document.addEventListener('DOMContentLoaded', function() {
+            updateDebugInfo('🚀 Page de test chargée');
+            updateDebugInfo(`🌐 API Base URL: ${API_BASE_URL}`);
+            updateDebugInfo('📋 Prêt pour les tests');
+        });
+    </script>
+</body>
+</html>
