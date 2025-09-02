@@ -32,8 +32,8 @@ Route::middleware('auth:sanctum')->group(function () {
 // Public tracking route (no authentication required)
 Route::get('/complaints/track/{reference}', [ComplaintController::class, 'track']);
 
-// Admin routes
-Route::middleware(['auth:sanctum', 'admin'])->prefix('admin')->group(function () {
+// Admin routes (use the middleware class name to avoid alias resolution issues)
+Route::middleware(['auth:sanctum', \App\Http\Middleware\AdminMiddleware::class])->prefix('admin')->group(function () {
     Route::get('/stats', [AdminController::class, 'dashboardStats']);
     Route::get('/agents', [AdminController::class, 'getAgents']);
     Route::post('/export', [AdminController::class, 'exportComplaints']);

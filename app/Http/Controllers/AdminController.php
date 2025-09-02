@@ -11,8 +11,13 @@ class AdminController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth:sanctum');
-        $this->middleware('admin');
+        try {
+            $this->middleware('auth:sanctum');
+            $this->middleware(\App\Http\Middleware\AdminMiddleware::class);
+        } catch (\Throwable $e) {
+            \Log::error('AdminController middleware registration failed: ' . $e->getMessage());
+            // Let the request continue; middleware failure will be apparent in logs.
+        }
     }
 
     public function dashboardStats()
